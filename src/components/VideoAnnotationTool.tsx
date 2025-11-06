@@ -421,8 +421,9 @@ export const VideoAnnotationTool = () => {
                 onPostagChange={setPostag}
                 sideView={sideView}
                 onSideViewChange={setSideView}
-                filenamePrefix={filenamePrefix}          
+                filenamePrefix={filenamePrefix}
                 onFilenamePrefixChange={setFilenamePrefix}
+                onCropAreaChange={setCropArea}
               />
               <ExcelUploader
                 onAnnotationsLoaded={handleAnnotationsLoaded}
