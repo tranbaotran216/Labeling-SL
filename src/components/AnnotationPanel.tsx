@@ -50,8 +50,10 @@ export const AnnotationPanel = ({
   sideView,
   onSideViewChange,
   filenamePrefix,
-  onFilenamePrefixChange
-}: AnnotationPanelProps) => {
+  onFilenamePrefixChange,
+  // Thêm prop mới để cập nhật crop area
+  onCropAreaChange
+}: AnnotationPanelProps & { onCropAreaChange: (area: CropArea) => void }) => {
   // console.log('AnnotationPanel props:', { sideView, onSideViewChange: typeof onSideViewChange });
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -72,7 +74,6 @@ export const AnnotationPanel = ({
             <Edit3 className="w-4 h-4" />
             Current Selection
           </h3>
-          
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div className="space-y-1">
               <div className="flex items-center gap-1 text-muted-foreground">
@@ -83,7 +84,6 @@ export const AnnotationPanel = ({
                 {formatDimensions(cropArea)}
               </Badge>
             </div>
-            
             <div className="space-y-1">
               <div className="flex items-center gap-1 text-muted-foreground">
                 <Clock className="w-3 h-3" />
@@ -94,7 +94,36 @@ export const AnnotationPanel = ({
               </Badge>
             </div>
           </div>
-          
+          <div className="grid grid-cols-2 gap-3 mt-2">
+            <div className="space-y-1">
+              <Label htmlFor="cropWidth">Crop Width</Label>
+              <Input
+                id="cropWidth"
+                type="number"
+                min={1}
+                value={Math.round(cropArea.width)}
+                onChange={e => {
+                  const width = Math.max(1, Number(e.target.value));
+                  onCropAreaChange({ ...cropArea, width });
+                }}
+                className="w-full"
+              />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="cropHeight">Crop Height</Label>
+              <Input
+                id="cropHeight"
+                type="number"
+                min={1}
+                value={Math.round(cropArea.height)}
+                onChange={e => {
+                  const height = Math.max(1, Number(e.target.value));
+                  onCropAreaChange({ ...cropArea, height });
+                }}
+                className="w-full"
+              />
+            </div>
+          </div>
           <div className="text-xs text-muted-foreground">
             Time: {formatTime(timeRange.start)} → {formatTime(timeRange.end)}
           </div>
@@ -190,6 +219,7 @@ export const AnnotationPanel = ({
               <option value="CH">CH — Từ chỉ định</option>
               <option value="B">B — Giới từ bổ nghĩa</option>
               <option value="Z">Z — Dấu câu</option>
+              <option value="s">S — Sentence</option>
             </select>
           </div>
 
